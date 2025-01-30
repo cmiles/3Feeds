@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    x:Class="ThreeFeeds.Pages.FeedItemListPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:feedReader="clr-namespace:PointlessWaymarks.FeedReader;assembly=PointlessWaymarks.FeedReader"
+    xmlns:pages="using:ThreeFeeds.Pages"
+    Title="FeedItemListPage"
+    x:DataType="pages:FeedItemListContext"
+    Shell.NavBarIsVisible="false">
+    <Grid>
+        <RefreshView Command="{Binding LoadFeedItemsCommand}" IsRefreshing="{Binding IsRunning}">
+            <CollectionView ItemsSource="{Binding Items}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="pages:FeedItemListItemWrapper">
+                        <VerticalStackLayout Padding="12">
+                            <Label Text="{Binding Item.Title}" />
+                            <VerticalStackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OpenLinkInSystemBrowserCommand}" />
+                            </VerticalStackLayout.GestureRecognizers>
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </Grid>
+</ContentPage>
