@@ -94,7 +94,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\3feeds\PointlessWaymarksTools\PointlessWaymarks.CommonTools\PointlessWaymarks.CommonTools.csproj" />
     <ProjectReference Include="..\PointlessWaymarksTools\PointlessWaymarks.FeedReader\PointlessWaymarks.FeedReader.csproj" />
   </ItemGroup>
 

@@ -6,7 +6,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:pages="using:ThreeFeeds.Pages"
     Title="Feeds"
-    x:DataType="pages:SettingsContext">
+    x:DataType="pages:SettingsContext"
+    Shell.NavBarIsVisible="{OnPlatform True,
+                                       WinUI=False}">
     <ScrollView>
         <VerticalStackLayout BindableLayout.ItemsSource="{Binding UrlSettings}">
             <BindableLayout.ItemTemplate>
@@ -19,13 +21,28 @@
                             <Label
                                 Margin="4"
                                 FontAttributes="Bold"
-                                Text="RSS Url" />
-                            <Entry Margin="4" Text="{Binding UserRssUrl, Mode=TwoWay}" />
-                            <Button
+                                Text="Feed Url" />
+                            <Entry
                                 Margin="4"
+                                Placeholder="Enter a Feed URL"
+                                Text="{Binding UserRssUrl, Mode=TwoWay}" />
+                            <Label
+                                Width="240"
+                                Margin="4"
+                                FontAttributes="Bold"
+                                Text="Select a Feed" />
+                            <StackLayout Margin="8,4,4,4" Orientation="Horizontal">
+                                <Picker
+                                    ItemDisplayBinding="{Binding Description}"
+                                    ItemsSource="{Binding Suggestions}"
+                                    SelectedItem="{Binding SelectedSuggestion}"
+                                    WidthRequest="240" />
+                                <Button Command="{Binding UseAndSaveSuggestionCommand}" Text="Select and Save" />
+                            </StackLayout>
+                            <Button
+                                Margin="4,8,4,4"
                                 Command="{Binding SaveRssUrlCommand}"
                                 Text="Save" />
-                            <Label Margin="8,4,4,4" Text="{Binding FeedState}" />
                             <Label Margin="12,4,4,4" Text="{Binding FeedMessage}" />
                         </VerticalStackLayout>
                     </Border>

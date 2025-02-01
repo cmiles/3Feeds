@@ -3,7 +3,9 @@
     x:Class="ThreeFeeds.Pages.HelpAboutPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="Help/About">
+    Title="Help/About"
+    Shell.NavBarIsVisible="{OnPlatform True,
+                                       WinUI=False}">
     <Grid>
         <WebView Source="/about.html" />
     </Grid>

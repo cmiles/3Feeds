@@ -14,6 +14,7 @@ public partial class SettingsItemFeedUrl : ObservableObject
     {
         PropertyChanged += OnPropertyChanged;
         Dialogs = dialogs;
+        SaveRssUrlCommand.NotifyCanExecuteChanged();
     }
 
     public IDialogService Dialogs { get; init; }
@@ -23,9 +24,25 @@ public partial class SettingsItemFeedUrl : ObservableObject
     [ObservableProperty] public partial bool HasChanges { get; set; }
     [ObservableProperty] public partial string ReferenceRssUrl { get; set; } = string.Empty;
     [ObservableProperty] public required partial Action<string> SaveRssUrlAction { get; set; }
+    [ObservableProperty] public partial SettingsItemFeedSuggestion? SelectedSuggestion { get; set; }
+
+    [ObservableProperty]
+    public partial List<SettingsItemFeedSuggestion> Suggestions { get; set; } =
+    [
+        new() { Description = "NPR", Url = "https://feeds.npr.org/1001/rss.xml" },
+        new() { Description = "BBC World News", Url = "http://feeds.bbci.co.uk/news/world/rss.xml" },
+        new() { Description = "France 24", Url = "https://www.france24.com/en/rss" },
+        new()
+        {
+            Description = "Reuters", Url = "https://www.reutersagency.com/feed/?taxonomy=best-topics&post_type=best"
+        },
+        new() { Description = "TechCrunch", Url = "https://techcrunch.com/feed/" },
+        new() { Description = "Hacker News Front Page", Url = "https://techcrunch.com/feed/" }
+    ];
+
     [ObservableProperty] public partial string UserRssUrl { get; set; } = string.Empty;
 
-    [RelayCommand(AllowConcurrentExecutions = false)]
+    [RelayCommand(AllowConcurrentExecutions = false, CanExecute = nameof(HasChanges))]
     public async Task SaveRssUrl()
     {
         await ThreadSwitcher.ResumeBackgroundAsync();
@@ -35,7 +52,6 @@ public partial class SettingsItemFeedUrl : ObservableObject
             UserRssUrl = UserRssUrl.Trim();
             SaveRssUrlAction(UserRssUrl);
             ReferenceRssUrl = UserRssUrl;
-            HasChanges = false;
             WeakReferenceMessenger.Default.Send(new SettingsChangedMessage(UserRssUrl));
         }
         catch (Exception e)
@@ -46,13 +62,29 @@ public partial class SettingsItemFeedUrl : ObservableObject
         await CheckRssUrl();
     }
 
+    [RelayCommand(AllowConcurrentExecutions = false)]
+    public async Task UseAndSaveSuggestion()
+    {
+        await ThreadSwitcher.ResumeBackgroundAsync();
+        if (SelectedSuggestion is null)
+        {
+            await ThreadSwitcher.ResumeForegroundAsync();
+            await Dialogs.DisplayAlert("No Suggestion Selected", "Please select a suggestion to use", "OK");
+            return;
+        }
+
+        UserRssUrl = SelectedSuggestion.Url;
+        await SaveRssUrl();
+    }
+
     private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (string.IsNullOrWhiteSpace(e.PropertyName)) return;
-        if (e.PropertyName.Equals(nameof(UserRssUrl)))
+        if (e.PropertyName.Equals(nameof(UserRssUrl)) || e.PropertyName.Equals(nameof(ReferenceRssUrl)))
             try
             {
                 HasChanges = !UserRssUrl.Trim().Equals(ReferenceRssUrl);
+                SaveRssUrlCommand.NotifyCanExecuteChanged();
                 Task.Run(CheckRssUrl);
             }
             catch (Exception exception)
@@ -70,25 +102,15 @@ public partial class SettingsItemFeedUrl : ObservableObject
             if (!results.Items.Any())
             {
                 FeedState = "Warning";
-                FeedMessage = "RSS Url didn't return an error, but no Items were found?";
+                FeedMessage = "Warning: RSS Url didn't return an error, but no Items were found?";
                 return;
             }
 
             var resultBuilder = new StringBuilder();
 
             resultBuilder.AppendLine(
-                $"{results.Items.Count} Items, Title: {results.Title}, Last Update: {results.LastUpdatedDateString}");
-            //resultBuilder.AppendLine($"Description: {results.Description}");
-            //resultBuilder.AppendLine($"Copyright: {results.Copyright}");
+                $"Success: {results.Items.Count} Items, Title: {results.Title}, Last Update: {results.LastUpdatedDateString}");
             resultBuilder.AppendLine($"FeedType: {results.Type.ToString()}");
-            //resultBuilder.AppendLine($"Items ({results.Items.Count})");
-
-            //foreach (var loopItem in results.Items)
-            //{
-            //    resultBuilder.AppendLine(
-            //        $"  {loopItem.PublishingDateString} - {loopItem.Title} - {loopItem.Author}");
-            //    resultBuilder.AppendLine($"       {loopItem.Link}");
-            //}
 
             FeedState = "Success";
             FeedMessage = resultBuilder.ToString();
@@ -96,7 +118,7 @@ public partial class SettingsItemFeedUrl : ObservableObject
         catch (Exception e)
         {
             FeedState = "Error";
-            FeedMessage = e.Message;
+            FeedMessage = $"ERROR: {e.Message}";
         }
     }
 }

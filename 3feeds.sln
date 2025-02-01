@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PointlessWaymarks.FeedReade
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PointlessWaymarksTools", "PointlessWaymarksTools", "{3C1C22E7-A8A6-4719-824A-F4442F53879F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PointlessWaymarks.CommonTools", "..\3feeds\PointlessWaymarksTools\PointlessWaymarks.CommonTools\PointlessWaymarks.CommonTools.csproj", "{E48ACD23-3438-453D-A52D-3DFC88A52BCB}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,22 +17,18 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{F5D08EF1-553D-4665-9AC8-E3B9A43D7840}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F5D08EF1-553D-4665-9AC8-E3B9A43D7840}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5D08EF1-553D-4665-9AC8-E3B9A43D7840}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{F5D08EF1-553D-4665-9AC8-E3B9A43D7840}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F5D08EF1-553D-4665-9AC8-E3B9A43D7840}.Release|Any CPU.Build.0 = Release|Any CPU
 		{37B0C377-32FB-4071-8619-D6EF9F06B7E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{37B0C377-32FB-4071-8619-D6EF9F06B7E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37B0C377-32FB-4071-8619-D6EF9F06B7E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37B0C377-32FB-4071-8619-D6EF9F06B7E4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E48ACD23-3438-453D-A52D-3DFC88A52BCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E48ACD23-3438-453D-A52D-3DFC88A52BCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E48ACD23-3438-453D-A52D-3DFC88A52BCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E48ACD23-3438-453D-A52D-3DFC88A52BCB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{37B0C377-32FB-4071-8619-D6EF9F06B7E4} = {3C1C22E7-A8A6-4719-824A-F4442F53879F}
-		{E48ACD23-3438-453D-A52D-3DFC88A52BCB} = {3C1C22E7-A8A6-4719-824A-F4442F53879F}
 	EndGlobalSection
 EndGlobal

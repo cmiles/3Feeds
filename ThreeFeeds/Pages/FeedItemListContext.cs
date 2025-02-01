@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using PointlessWaymarks.CommonTools;
 using PointlessWaymarks.FeedReader;
 using ThreeFeeds.Helpers;
 
@@ -29,10 +28,12 @@ public partial class FeedItemListContext : ObservableObject
 
     [ObservableProperty] public partial bool IsRunning { get; set; }
     [ObservableProperty] public partial ObservableCollection<FeedItemListItemWrapper> Items { get; set; }
+    [ObservableProperty] public partial bool Loading { get; set; } = true;
 
     private void LoadFeedItemsFinished(Task obj)
     {
         IsRunning = false;
+        Loading = false;
     }
 
     [RelayCommand]
@@ -84,9 +85,11 @@ public partial class FeedItemListContext : ObservableObject
         var currentIds = Items.Select(x => x.Item.Id).Distinct().ToList();
 
         var toAdd = currentItems.Where(x => !currentIds.Contains(x.Id)).ToList();
+        var toRemove = Items.Where(x => !currentIds.Contains(x.Item.Id)).ToList();
 
         await ThreadSwitcher.ResumeForegroundAsync();
 
+        toRemove.ForEach(x => Items.Remove(x));
         toAdd.ForEach(x => Items.Add(new FeedItemListItemWrapper { Item = x }));
 
         Items.SortByDescending(x => x.Item.PublishingDate ?? DateTime.Now);

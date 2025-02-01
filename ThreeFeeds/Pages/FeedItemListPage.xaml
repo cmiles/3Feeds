@@ -4,10 +4,11 @@
     x:Class="ThreeFeeds.Pages.FeedItemListPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:feedReader="clr-namespace:PointlessWaymarks.FeedReader;assembly=PointlessWaymarks.FeedReader"
     xmlns:pages="using:ThreeFeeds.Pages"
     Title="Feed Items"
-    x:DataType="pages:FeedItemListContext">
+    x:DataType="pages:FeedItemListContext"
+    Shell.NavBarIsVisible="{OnPlatform True,
+                                       WinUI=False}">
     <Grid>
         <RefreshView Command="{Binding LoadFeedItemsCommand}" IsRefreshing="{Binding IsRunning}">
             <CollectionView ItemsSource="{Binding Items}">
@@ -29,8 +30,11 @@
             HorizontalOptions="End"
             IsVisible="{OnPlatform False,
                                    WinUI=True}"
-            Opacity=".7"
             Text="Refresh"
             VerticalOptions="Start" />
+        <ActivityIndicator
+            HorizontalOptions="Center"
+            IsRunning="{Binding Loading}"
+            VerticalOptions="Center" />
     </Grid>
 </ContentPage>
