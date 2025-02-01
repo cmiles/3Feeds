@@ -18,6 +18,6 @@ public partial class FeedItemListItemWrapper : ObservableObject
     [RelayCommand]
     public void OpenLinkInSystemBrowser()
     {
-        Browser.Default.OpenAsync(Item.Link, BrowserLaunchMode.SystemPreferred);
+        Browser.Default.OpenAsync(Item.Link ?? "<h1>Error?</h1>", BrowserLaunchMode.SystemPreferred);
     }
 }

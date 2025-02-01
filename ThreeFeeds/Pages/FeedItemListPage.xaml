@@ -6,9 +6,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:feedReader="clr-namespace:PointlessWaymarks.FeedReader;assembly=PointlessWaymarks.FeedReader"
     xmlns:pages="using:ThreeFeeds.Pages"
-    Title="FeedItemListPage"
-    x:DataType="pages:FeedItemListContext"
-    Shell.NavBarIsVisible="false">
+    Title="Feed Items"
+    x:DataType="pages:FeedItemListContext">
     <Grid>
         <RefreshView Command="{Binding LoadFeedItemsCommand}" IsRefreshing="{Binding IsRunning}">
             <CollectionView ItemsSource="{Binding Items}">
@@ -24,5 +23,14 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </RefreshView>
+        <Button
+            Margin="0,6,18,6"
+            Command="{Binding LoadFeedItemsCommand}"
+            HorizontalOptions="End"
+            IsVisible="{OnPlatform False,
+                                   WinUI=True}"
+            Opacity=".7"
+            Text="Refresh"
+            VerticalOptions="Start" />
     </Grid>
 </ContentPage>

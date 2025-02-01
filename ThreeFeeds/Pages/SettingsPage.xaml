@@ -5,21 +5,30 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:pages="using:ThreeFeeds.Pages"
-    Title="SettingsPage"
+    Title="Feeds"
     x:DataType="pages:SettingsContext">
     <ScrollView>
         <VerticalStackLayout BindableLayout.ItemsSource="{Binding UrlSettings}">
             <BindableLayout.ItemTemplate>
                 <DataTemplate x:DataType="pages:SettingsItemFeedUrl">
-                    <VerticalStackLayout>
-                        <Label Text="RSS Url" />
-                        <Entry Text="{Binding RssUrl, Mode=TwoWay}" />
-                        <StackLayout Orientation="Horizontal">
-                            <Button Command="{Binding SaveRssUrlCommand}" Text="Save" />
-                        </StackLayout>
-                        <Label Text="{Binding FeedState}" />
-                        <Label MaxLines="30" Text="{Binding FeedMessage}" />
-                    </VerticalStackLayout>
+                    <Border Margin="6,2,12,2" StrokeThickness="1">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="4" />
+                        </Border.StrokeShape>
+                        <VerticalStackLayout Padding="12">
+                            <Label
+                                Margin="4"
+                                FontAttributes="Bold"
+                                Text="RSS Url" />
+                            <Entry Margin="4" Text="{Binding UserRssUrl, Mode=TwoWay}" />
+                            <Button
+                                Margin="4"
+                                Command="{Binding SaveRssUrlCommand}"
+                                Text="Save" />
+                            <Label Margin="8,4,4,4" Text="{Binding FeedState}" />
+                            <Label Margin="12,4,4,4" Text="{Binding FeedMessage}" />
+                        </VerticalStackLayout>
+                    </Border>
                 </DataTemplate>
             </BindableLayout.ItemTemplate>
         </VerticalStackLayout>

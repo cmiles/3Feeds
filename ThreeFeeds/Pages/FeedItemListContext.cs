@@ -1,6 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using PointlessWaymarks.CommonTools;
 using PointlessWaymarks.FeedReader;
 using ThreeFeeds.Helpers;
 
@@ -10,8 +12,19 @@ public partial class FeedItemListContext : ObservableObject
 {
     public FeedItemListContext()
     {
-        IsRunning = true;
         Items = [];
+
+        WeakReferenceMessenger.Default.Register<SettingsChangedMessage>(this, async void (_, _) =>
+        {
+            try
+            {
+                await LoadFeedItems();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        });
     }
 
     [ObservableProperty] public partial bool IsRunning { get; set; }
@@ -75,6 +88,10 @@ public partial class FeedItemListContext : ObservableObject
         await ThreadSwitcher.ResumeForegroundAsync();
 
         toAdd.ForEach(x => Items.Add(new FeedItemListItemWrapper { Item = x }));
+
+        Items.SortByDescending(x => x.Item.PublishingDate ?? DateTime.Now);
+
+        IsRunning = false;
     }
 
     public void OnAppearing(object? sender, EventArgs e)
