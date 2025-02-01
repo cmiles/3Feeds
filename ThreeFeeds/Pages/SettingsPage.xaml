@@ -26,23 +26,28 @@
                                 Margin="4"
                                 Placeholder="Enter a Feed URL"
                                 Text="{Binding UserRssUrl, Mode=TwoWay}" />
-                            <Label
-                                Width="240"
-                                Margin="4"
-                                FontAttributes="Bold"
-                                Text="Select a Feed" />
-                            <StackLayout Margin="8,4,4,4" Orientation="Horizontal">
-                                <Picker
-                                    ItemDisplayBinding="{Binding Description}"
-                                    ItemsSource="{Binding Suggestions}"
-                                    SelectedItem="{Binding SelectedSuggestion}"
-                                    WidthRequest="240" />
-                                <Button Command="{Binding UseAndSaveSuggestionCommand}" Text="Select and Save" />
-                            </StackLayout>
                             <Button
-                                Margin="4,8,4,4"
+                                Margin="4"
                                 Command="{Binding SaveRssUrlCommand}"
                                 Text="Save" />
+                            <Label
+                                Width="240"
+                                Margin="4,8,4,4"
+                                FontAttributes="Bold"
+                                Text="Select a Feed" />
+                            <Picker
+                                Margin="4"
+                                HorizontalOptions="Start"
+                                ItemDisplayBinding="{Binding Description}"
+                                ItemsSource="{Binding Suggestions}"
+                                SelectedItem="{Binding SelectedSuggestion}"
+                                WidthRequest="240" />
+                            <Button
+                                Margin="4"
+                                Command="{Binding UseAndSaveSuggestionCommand}"
+                                HorizontalOptions="Start"
+                                Text="Select and Save"
+                                WidthRequest="240" />
                             <Label Margin="12,4,4,4" Text="{Binding FeedMessage}" />
                         </VerticalStackLayout>
                     </Border>
