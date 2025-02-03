@@ -37,7 +37,7 @@ public partial class SettingsItemFeedUrl : ObservableObject
             Description = "Reuters", Url = "https://www.reutersagency.com/feed/?taxonomy=best-topics&post_type=best"
         },
         new() { Description = "TechCrunch", Url = "https://techcrunch.com/feed/" },
-        new() { Description = "Hacker News Front Page", Url = "https://techcrunch.com/feed/" }
+        new() { Description = "Hacker News Front Page", Url = "https://hnrss.org/frontpage" }
     ];
 
     [ObservableProperty] public partial string UserRssUrl { get; set; } = string.Empty;

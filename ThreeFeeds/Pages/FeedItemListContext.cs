@@ -9,9 +9,11 @@ namespace ThreeFeeds.Pages;
 
 public partial class FeedItemListContext : ObservableObject
 {
-    public FeedItemListContext()
+    public FeedItemListContext(IDialogService dialogs)
     {
         Items = [];
+
+        Dialogs = dialogs;
 
         WeakReferenceMessenger.Default.Register<SettingsChangedMessage>(this, async void (_, _) =>
         {
@@ -26,6 +28,7 @@ public partial class FeedItemListContext : ObservableObject
         });
     }
 
+    [ObservableProperty] public partial IDialogService Dialogs { get; set; }
     [ObservableProperty] public partial bool IsRunning { get; set; }
     [ObservableProperty] public partial ObservableCollection<FeedItemListItemWrapper> Items { get; set; }
     [ObservableProperty] public partial bool Loading { get; set; } = true;
@@ -82,15 +85,16 @@ public partial class FeedItemListContext : ObservableObject
                 Console.WriteLine(e);
             }
 
-        var currentIds = Items.Select(x => x.Item.Id).Distinct().ToList();
+        var existingIds = Items.Select(x => x.Item.Id).Distinct().ToList();
+        var currentIds = currentItems.Select(x => x.Id).Distinct().ToList();
 
-        var toAdd = currentItems.Where(x => !currentIds.Contains(x.Id)).ToList();
+        var toAdd = currentItems.Where(x => !existingIds.Contains(x.Id)).ToList();
         var toRemove = Items.Where(x => !currentIds.Contains(x.Item.Id)).ToList();
 
         await ThreadSwitcher.ResumeForegroundAsync();
 
         toRemove.ForEach(x => Items.Remove(x));
-        toAdd.ForEach(x => Items.Add(new FeedItemListItemWrapper { Item = x }));
+        toAdd.ForEach(x => Items.Add(new FeedItemListItemWrapper { Item = x, Dialogs = Dialogs }));
 
         Items.SortByDescending(x => x.Item.PublishingDate ?? DateTime.Now);
 

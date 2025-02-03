@@ -1,23 +1,29 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using PointlessWaymarks.FeedReader;
+using ThreeFeeds.Helpers;
 
 namespace ThreeFeeds.Pages;
 
 public partial class FeedItemListItemWrapper : ObservableObject
 {
+    [ObservableProperty] public required partial IDialogService Dialogs { get; set; }
     [ObservableProperty] public required partial FeedItem Item { get; set; }
-    [ObservableProperty] public partial bool ShowDescription { get; set; }
 
     [RelayCommand]
-    public void ToggleShowDescription()
+    public async Task OpenLinkInSystemBrowser()
     {
-        ShowDescription = !ShowDescription;
-    }
+        await ThreadSwitcher.ResumeForegroundAsync();
 
-    [RelayCommand]
-    public void OpenLinkInSystemBrowser()
-    {
-        Browser.Default.OpenAsync(Item.Link ?? "<h1>Error?</h1>", BrowserLaunchMode.SystemPreferred);
+        try
+        {
+            var launchedOk = await Browser.Default!.OpenAsync(Item.Link, BrowserLaunchMode.SystemPreferred);
+
+            if (!launchedOk) await Dialogs.DisplayAlert("Error Opening Link", "The link did not open?", "Ok");
+        }
+        catch (Exception e)
+        {
+            await Dialogs.DisplayAlert("Error Opening Link", e.Message, "Ok");
+        }
     }
 }
